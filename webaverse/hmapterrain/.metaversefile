@@ -1,5 +1,5 @@
 {
-  "name": "hmapterrain",
-  "description": "hmterrain",
+  "name": "heightmapterrain",
+  "description": "terrain generated via height map",
   "start_url": "index.js"
 }
