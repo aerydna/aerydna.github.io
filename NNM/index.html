@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Waveform Playlist Basic HTML</title>
+    <link rel="stylesheet" href="https://unpkg.com/waveform-playlist@4.2.2/styles/playlist.css">
+    <script src="https://kit.fontawesome.com/ef69927139.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <button type="button" id="btn-play" title="Play">
+        <i class="fas fa-play"></i>
+    </button>
+    <button type="button" id="btn-pause" title="Pause">
+        <i class="fas fa-pause"></i>
+    </button>
+    <div id="playlist"></div>
+    <script src="https://unpkg.com/waveform-playlist@4.2.2/build/waveform-playlist.var.js"></script>
+    <script src="jszip.js"></script>
+    <script>
+        var playlist = WaveformPlaylist.init({
+            container: document.getElementById("playlist"),
+            samplesPerPixel: 256,
+            zoomLevels: [ 128, 256, 512 ],
+            controls: {
+                show: true
+            }
+        });
+        
+        function loadSong(song){
+            function partUrl(inst){
+                return "./" + song + "/" + inst + ".mp3";
+            };
+
+            playlist.load(
+            [
+                { src:  partUrl("VOICES") },
+                { src: partUrl("GUITAR") },
+                { src: partUrl("BASS") },
+                { src: partUrl("DRUM") },
+                { src: partUrl("KEY") },
+                { src: partUrl("CLICK") } ]
+            ).then(() => {
+                var ee = playlist.getEventEmitter();
+
+                document.getElementById("btn-play").addEventListener("click", () => {
+                    ee.emit("play");
+                });
+
+                document.getElementById("btn-pause").addEventListener("click", () => {
+                    ee.emit("pause");
+                });
+            });
+        }
+    </script>
+    <button onclick="{loadSong('01')}">Overcoming</button>
+    <button onclick="{loadSong('02')}">Beyond The World</button>
+    <button onclick="{loadSong('03')}">Rook</button>
+    <button onclick="{loadSong('04')}">Power on Insanity</button>
+    <button onclick="{loadSong('05')}">H.P.JungleMan</button>
+    <button onclick="{loadSong('06')}">Inferno</button>
+    <button onclick="{loadSong('07')}">... to a million miles away</button>
+    <button onclick="{loadSong('08')}">Showdown of Fate</button>
+    <button onclick="{loadSong('09')}">Bishop</button>
+</body>
+
+</html>
