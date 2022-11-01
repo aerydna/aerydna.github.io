@@ -39,7 +39,7 @@ export default e => {
     });
 
     const obj = mobber.object;
-    app.add(chunks);
+    app.add(obj);
     chunks.updateMatrixWorld();
   })());
 
@@ -49,8 +49,8 @@ export default e => {
 
   useCleanup(() => {
     if (mobber) {
-      const chunks = mobber.getChunks();
-      scene.remove(chunks);
+      const obj = mobber.getChunks();
+      scene.remove(obj);
       mobber.destroy();
     }
   });
