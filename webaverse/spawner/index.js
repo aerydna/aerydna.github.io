@@ -38,13 +38,9 @@ export default e => {
       mobData,
     });
 
-    const chunks = mobber.getChunks();
+    const obj = mobber.object;
     app.add(chunks);
     chunks.updateMatrixWorld();
-
-    if (wait) {
-      await mobber.waitForUpdate();
-    }
   })());
 
   useFrame(({timestamp, timeDiff}) => {
