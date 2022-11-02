@@ -40,7 +40,7 @@ export default e => {
 
     const obj = mobber.object;
     app.add(obj);
-    chunks.updateMatrixWorld();
+    obj.updateMatrixWorld();
   })());
 
   useFrame(({timestamp, timeDiff}) => {
