@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
-const {useApp, useProcGenManager, useMobManager, useFrame, useScene, useCleanup} = metaversefile;
+const {useApp, useProcGenManager, useMobManager, useFrame, useScene, useCleanup, usePhysics} = metaversefile;
 
 export default e => {
   const app = useApp();
   const mobManager = useMobManager();
   const scene = useScene();
   const procGenManager = useProcGenManager();
+  const physics = usePhysics();
 
   app.name = 'spawner';
 
@@ -36,6 +37,7 @@ export default e => {
     mobber = mobManager.createMobber({
       procGenInstance,
       mobData,
+      physics,
     });
 
     const obj = mobber.object;
