@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
-const {useApp, usePhysics, useProcGenManager, useMobManager, useFrame, useScene, useCleanup} = metaversefile;
+const {useApp, useProcGenManager, useMobManager, useFrame, useScene, useCleanup, usePhysics} = metaversefile;
 
 export default e => {
   const app = useApp();
