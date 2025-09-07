@@ -14,18 +14,56 @@
     <button type="button" id="btn-pause" title="Pause">
         <i class="fas fa-pause"></i>
     </button>
+    <button type="button" id="btn-zoom-in"  title="Zoom In"><i class="fas fa-magnifying-glass-plus"></i></button>
+    <button type="button" id="btn-zoom-out" title="Zoom Out"><i class="fas fa-magnifying-glass-minus"></i></button>
+    <input id="zoom-slider" type="range" min="0" max="6" step="1" value="2" style="vertical-align: middle; width: 200px;">
     <div id="playlist"></div>
     <script src="https://unpkg.com/waveform-playlist@4.2.2/build/waveform-playlist.var.js"></script>
     <script src="jszip.js"></script>
     <script>
+        const ZOOM_LEVELS = [64, 128, 256, 512, 1024, 2048, 4096]; // personalizzabile
+        const INITIAL_ZOOM_INDEX = 2; // 256
         var playlist = WaveformPlaylist.init({
             container: document.getElementById("playlist"),
-            samplesPerPixel: 256,
-            zoomLevels: [ 128, 256, 512 ],
-            controls: {
-                show: true
-            }
+            samplesPerPixel: ZOOM_LEVELS[INITIAL_ZOOM_INDEX],
+            zoomLevels: ZOOM_LEVELS,
+            controls: { show: true }
         });
+        const zoomInBtn   = document.getElementById("btn-zoom-in");
+        const zoomOutBtn  = document.getElementById("btn-zoom-out");
+        const zoomSlider  = document.getElementById("zoom-slider");
+        zoomSlider.max    = ZOOM_LEVELS.length - 1;
+        zoomSlider.value  = INITIAL_ZOOM_INDEX;
+
+        // stato corrente (manteniamo l’indice)
+        let currentZoomIdx = INITIAL_ZOOM_INDEX;
+
+        // helper per portarsi a un indice specifico usando gli eventi nativi
+        function attachZoomHandlers(ee) {
+        function setZoomTo(targetIdx) {
+            targetIdx = Math.max(0, Math.min(ZOOM_LEVELS.length - 1, targetIdx));
+            const steps = targetIdx - currentZoomIdx;
+            if (steps === 0) return;
+
+            const emit = steps > 0 ? () => ee.emit("zoomout") : () => ee.emit("zoomin");
+            for (let i = 0; i < Math.abs(steps); i++) emit();   // avanza tra i livelli
+            currentZoomIdx = targetIdx;
+            zoomSlider.value = currentZoomIdx;
+        }
+
+        zoomInBtn.onclick  = () => setZoomTo(currentZoomIdx - 1);
+        zoomOutBtn.onclick = () => setZoomTo(currentZoomIdx + 1);
+        zoomSlider.oninput = (e) => setZoomTo(parseInt(e.target.value, 10));
+
+        // zoom con CTRL + rotellina direttamente sopra il playlist container
+        const container = document.getElementById("playlist");
+        container.addEventListener("wheel", (ev) => {
+            if (!ev.ctrlKey) return; // evita conflitti con lo scroll normale
+            ev.preventDefault();
+            if (ev.deltaY < 0) zoomInBtn.click();
+            else zoomOutBtn.click();
+        }, { passive: false });
+        }
         
         function loadSong(song){
             playlist.clear();
@@ -51,6 +89,11 @@
                 document.getElementById("btn-pause").addEventListener("click", () => {
                     ee.emit("pause");
                 });
+
+                ee.emit("automaticscroll", true);
+                attachZoomHandlers(ee);
+
+                
             });
         }
     </script>
