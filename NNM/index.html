@@ -21,8 +21,8 @@
     <script src="https://unpkg.com/waveform-playlist@4.2.2/build/waveform-playlist.var.js"></script>
     <script src="jszip.js"></script>
     <script>
-        const ZOOM_LEVELS = [64, 128, 256, 512, 1024, 2048, 4096]; // personalizzabile
-        const INITIAL_ZOOM_INDEX = 2; // 256
+        const ZOOM_LEVELS = [64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]; // personalizzabile
+        const INITIAL_ZOOM_INDEX = 8; // 256
         var playlist = WaveformPlaylist.init({
             container: document.getElementById("playlist"),
             samplesPerPixel: ZOOM_LEVELS[INITIAL_ZOOM_INDEX],
